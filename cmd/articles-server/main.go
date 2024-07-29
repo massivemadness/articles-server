@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/massivemadness/articles-server/api"
+)
 
 func main() {
-    fmt.Println("Hello World!")
+	fmt.Printf("Hello World = %s", api.ErrNotFound.Error())
 }
