@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func GetArticlesHandler(asv articles.ArticleService) func(http.ResponseWriter, *http.Request) {
+func GetArticlesHandler(asv articles.ArticleService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		render.Status(r, http.StatusOK)
 		render.JSON(w, r, ArticlesResponse{
@@ -16,7 +16,7 @@ func GetArticlesHandler(asv articles.ArticleService) func(http.ResponseWriter, *
 	}
 }
 
-func GetArticleHandler(_ articles.ArticleService) func(http.ResponseWriter, *http.Request) {
+func GetArticleHandler(_ articles.ArticleService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		render.Status(r, http.StatusBadRequest)
 		render.JSON(w, r, api.HttpError{
