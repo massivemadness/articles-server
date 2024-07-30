@@ -6,7 +6,7 @@ import (
 )
 
 type ArticleService interface {
-	GetArticles() string
+	GetArticles() []string
 	GetArticle(articleID string) string
 }
 
@@ -25,8 +25,8 @@ func New(
 	}
 }
 
-func (s *ArticleServiceImpl) GetArticles() string {
-	return "[1, 2, 3, 4, 5]"
+func (s *ArticleServiceImpl) GetArticles() []string {
+	return []string{"1", "2", "3", "4", "5", "6", "7", "8", "9"}
 }
 
 func (s *ArticleServiceImpl) GetArticle(articleID string) string {

@@ -1,11 +1,9 @@
 package v1
 
 import (
-	"fmt"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/massivemadness/articles-server/internal/articles"
-	"net/http"
 )
 
 func NewRouter(asv articles.ArticleService) chi.Router {
@@ -15,21 +13,12 @@ func NewRouter(asv articles.ArticleService) chi.Router {
 	// r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
 
-	r.Route("/v1", func(r chi.Router) {
+	r.Route("/api/v1", func(r chi.Router) {
 		r.Get("/articles", GetArticlesHandler(asv))
 		r.Get("/articles/{id}", GetArticleHandler(asv))
+		// TODO create (POST)
+		// TODO update (PATCH)
+		// TODO delete (DELETE)
 	})
 	return r
-}
-
-func GetArticlesHandler(asv articles.ArticleService) func(http.ResponseWriter, *http.Request) {
-	return func(resp http.ResponseWriter, req *http.Request) {
-		fmt.Printf("Received v1/articles request: %v", asv.GetArticles())
-	}
-}
-
-func GetArticleHandler(asv articles.ArticleService) func(http.ResponseWriter, *http.Request) {
-	return func(resp http.ResponseWriter, req *http.Request) {
-		fmt.Printf("Received v1/articles/{id} request: %v", asv.GetArticle("123"))
-	}
 }
