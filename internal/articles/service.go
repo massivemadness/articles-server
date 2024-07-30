@@ -1,17 +1,19 @@
 package articles
 
+import "github.com/massivemadness/articles-server/internal/config"
+
 type ArticleService interface {
 	GetArticles() string
 	GetArticle(articleID string) string
 }
 
 type ArticleServiceImpl struct {
-	ServiceName string
+	cfg *config.Config
 }
 
-func New(serviceName string) ArticleService {
+func New(cfg *config.Config) ArticleService {
 	return &ArticleServiceImpl{
-		ServiceName: serviceName,
+		cfg: cfg,
 	}
 }
 
