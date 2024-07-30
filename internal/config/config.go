@@ -7,19 +7,29 @@ import (
 	"time"
 )
 
+var (
+	EnvLocal = "local"
+	EnvDev   = "dev"
+	EnvProd  = "prod"
+)
+
 type Config struct {
-	Env        string     `yaml:"env"`
-	HttpServer HTTPServer `yaml:"http_server"`
+	Application
+	HttpServer HTTPServer `yaml:"http_server" env-required:"true"`
+}
+
+type Application struct {
+	Env string `yaml:"env" env-required:"true"`
 }
 
 type HTTPServer struct {
-	Address     string        `yaml:"address"`
-	Port        int           `yaml:"port"`
-	Timeout     time.Duration `yaml:"timeout"`
-	IdleTimeout time.Duration `yaml:"idle_timeout"`
+	Address     string        `yaml:"address" env-default:"localhost"`
+	Port        int           `yaml:"port" env-default:"8080"`
+	Timeout     time.Duration `yaml:"timeout" env-default:"4s"`
+	IdleTimeout time.Duration `yaml:"idle_timeout" env-default:"60s"`
 }
 
-func Load() *Config {
+func MustLoad() *Config {
 	configPath := getConfigPath()
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		log.Fatalf("Config file does not exist: %s", configPath)

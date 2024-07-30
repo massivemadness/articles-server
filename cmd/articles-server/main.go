@@ -5,15 +5,18 @@ import (
 	"github.com/massivemadness/articles-server/api/v1"
 	"github.com/massivemadness/articles-server/internal/articles"
 	"github.com/massivemadness/articles-server/internal/config"
+	"github.com/massivemadness/articles-server/internal/logger"
+	"go.uber.org/zap"
 	"net/http"
 )
 
 func main() {
-	cfg := config.Load()
+	cfg := config.MustLoad()
+	zapLogger := logger.NewZapLogger(cfg.Env)
 
 	// TODO create deps
 
-	asv := articles.New(cfg)
+	asv := articles.New(cfg, zapLogger)
 
 	httpServer := http.Server{
 		Addr:         fmt.Sprintf("%s:%d", cfg.HttpServer.Address, cfg.HttpServer.Port),
@@ -23,8 +26,10 @@ func main() {
 		Handler:      v1.NewRouter(asv),
 	}
 
-	err := httpServer.ListenAndServe()
-	if err != nil {
-		fmt.Printf("Error starting server: %s", err)
+	zapLogger.Info("Starting http server")
+
+	serverError := httpServer.ListenAndServe()
+	if serverError != nil {
+		zapLogger.Error("Cannot start http server", zap.Error(serverError))
 	}
 }

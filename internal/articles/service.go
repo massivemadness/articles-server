@@ -1,6 +1,9 @@
 package articles
 
-import "github.com/massivemadness/articles-server/internal/config"
+import (
+	"github.com/massivemadness/articles-server/internal/config"
+	"go.uber.org/zap"
+)
 
 type ArticleService interface {
 	GetArticles() string
@@ -8,12 +11,17 @@ type ArticleService interface {
 }
 
 type ArticleServiceImpl struct {
-	cfg *config.Config
+	cfg       *config.Config
+	zapLogger *zap.Logger
 }
 
-func New(cfg *config.Config) ArticleService {
+func New(
+	cfg *config.Config,
+	zapLogger *zap.Logger,
+) ArticleService {
 	return &ArticleServiceImpl{
-		cfg: cfg,
+		cfg:       cfg,
+		zapLogger: zapLogger,
 	}
 }
 
