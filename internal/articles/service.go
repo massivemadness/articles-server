@@ -1,4 +1,4 @@
-package internal
+package articles
 
 type ArticleService interface {
 	GetArticles() string
@@ -7,6 +7,12 @@ type ArticleService interface {
 
 type ArticleServiceImpl struct {
 	ServiceName string
+}
+
+func New(serviceName string) ArticleService {
+	return &ArticleServiceImpl{
+		ServiceName: serviceName,
+	}
 }
 
 func (s *ArticleServiceImpl) GetArticles() string {
