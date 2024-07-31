@@ -6,7 +6,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-func NewZapLogger(env string) *zap.Logger {
+func NewLogger(env string) *zap.Logger {
 	var logger *zap.Logger
 
 	switch env {

@@ -11,17 +11,17 @@ type ArticleService interface {
 }
 
 type ArticleServiceImpl struct {
-	cfg       *config.Config
-	zapLogger *zap.Logger
+	cfg    *config.Config
+	logger *zap.Logger
 }
 
 func New(
 	cfg *config.Config,
-	zapLogger *zap.Logger,
+	logger *zap.Logger,
 ) ArticleService {
 	return &ArticleServiceImpl{
-		cfg:       cfg,
-		zapLogger: zapLogger,
+		cfg:    cfg,
+		logger: logger,
 	}
 }
 

@@ -2,7 +2,7 @@ package v1
 
 import (
 	"github.com/go-chi/render"
-	"github.com/massivemadness/articles-server/api"
+	"github.com/massivemadness/articles-server/api/common"
 	"github.com/massivemadness/articles-server/internal/articles"
 	"net/http"
 )
@@ -19,9 +19,9 @@ func GetArticlesHandler(asv articles.ArticleService) http.HandlerFunc {
 func GetArticleHandler(_ articles.ArticleService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		render.Status(r, http.StatusBadRequest)
-		render.JSON(w, r, api.HttpError{
+		render.JSON(w, r, common.HttpError{
 			ErrorMessage: "Not implemented",
-			ErrorCode:    api.ErrUnknown.Error(),
+			ErrorCode:    common.ErrUnknown.Error(),
 		})
 	}
 }
