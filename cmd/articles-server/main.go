@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/massivemadness/articles-server/api"
+	"github.com/massivemadness/articles-server/api/common"
 	"github.com/massivemadness/articles-server/internal/articles"
 	"github.com/massivemadness/articles-server/internal/config"
 	"github.com/massivemadness/articles-server/internal/logger"
@@ -13,17 +14,20 @@ import (
 func main() {
 	cfg := config.MustLoad()
 	zapLogger := logger.NewLogger(cfg.Env)
-
-	// TODO create deps
-
 	asv := articles.New(cfg, zapLogger)
+
+	wrapper := &common.Wrapper{
+		ArticleService: asv,
+		Cfg:            cfg,
+		Logger:         zapLogger,
+	}
 
 	httpServer := http.Server{
 		Addr:         fmt.Sprintf("%s:%d", cfg.HttpServer.Address, cfg.HttpServer.Port),
 		ReadTimeout:  cfg.HttpServer.Timeout,
 		WriteTimeout: cfg.HttpServer.Timeout,
 		IdleTimeout:  cfg.HttpServer.IdleTimeout,
-		Handler:      api.NewRouter(asv),
+		Handler:      api.NewRouter(wrapper),
 	}
 
 	zapLogger.Info("Starting http server")

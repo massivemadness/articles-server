@@ -3,11 +3,11 @@ package api
 import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/massivemadness/articles-server/api/common"
 	"github.com/massivemadness/articles-server/api/v1"
-	"github.com/massivemadness/articles-server/internal/articles"
 )
 
-func NewRouter(asv articles.ArticleService) chi.Router {
+func NewRouter(wrapper *common.Wrapper) chi.Router {
 	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
@@ -15,8 +15,8 @@ func NewRouter(asv articles.ArticleService) chi.Router {
 	r.Use(middleware.RequestID)
 
 	r.Route("/api/v1", func(r chi.Router) {
-		r.Get("/articles", v1.GetArticlesHandler(asv))
-		r.Get("/articles/{id}", v1.GetArticleHandler(asv))
+		r.Get("/articles", v1.GetArticlesHandler(wrapper))
+		r.Get("/articles/{id}", v1.GetArticleHandler(wrapper))
 		// TODO create (POST)
 		// TODO update (PATCH)
 		// TODO delete (DELETE)

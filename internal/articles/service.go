@@ -6,8 +6,8 @@ import (
 )
 
 type ArticleService interface {
-	GetArticles() []string
-	GetArticle(articleID string) string
+	GetArticles() ([]string, error)
+	GetArticle(articleID int64) (Article, error)
 }
 
 type ArticleServiceImpl struct {
@@ -25,10 +25,20 @@ func New(
 	}
 }
 
-func (s *ArticleServiceImpl) GetArticles() []string {
-	return []string{"1", "2", "3", "4", "5", "6", "7", "8", "9"}
+type Article struct {
+	ID    int64
+	Title string
+	Desc  string
 }
 
-func (s *ArticleServiceImpl) GetArticle(articleID string) string {
-	return articleID
+func (s *ArticleServiceImpl) GetArticles() ([]string, error) {
+	return []string{"1", "2", "3", "4", "5", "6", "7", "8", "9"}, nil
+}
+
+func (s *ArticleServiceImpl) GetArticle(articleID int64) (Article, error) {
+	return Article{
+		ID:    articleID,
+		Title: "Lorem ipsum",
+		Desc:  "Lorem ipsum dolor sit amet",
+	}, nil
 }
