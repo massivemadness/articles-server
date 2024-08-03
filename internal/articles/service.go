@@ -15,7 +15,7 @@ type ArticleServiceImpl struct {
 	logger *zap.Logger
 }
 
-func New(
+func NewService(
 	cfg *config.Config,
 	logger *zap.Logger,
 ) ArticleService {

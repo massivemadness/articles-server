@@ -20,7 +20,7 @@ import (
 func main() {
 	cfg := config.MustLoad()
 	zapLogger := logger.NewLogger(cfg.Env)
-	articleService := articles.New(cfg, zapLogger)
+	articleService := articles.NewService(cfg, zapLogger)
 
 	wrapper := &common.Wrapper{
 		ArticleService: articleService,

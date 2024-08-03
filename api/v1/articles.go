@@ -53,7 +53,7 @@ func GetArticleHandler(wrapper *common.Wrapper) http.HandlerFunc {
 
 		render.Status(r, http.StatusOK)
 		render.JSON(w, r, ArticleResponse{
-			Id:          article.ID,
+			ID:          article.ID,
 			Title:       article.Title,
 			Description: article.Desc,
 		})
