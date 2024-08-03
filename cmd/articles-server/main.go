@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"github.com/massivemadness/articles-server/api"
 	"github.com/massivemadness/articles-server/api/common"
@@ -9,15 +11,19 @@ import (
 	"github.com/massivemadness/articles-server/internal/logger"
 	"go.uber.org/zap"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 )
 
 func main() {
 	cfg := config.MustLoad()
 	zapLogger := logger.NewLogger(cfg.Env)
-	asv := articles.New(cfg, zapLogger)
+	articleService := articles.New(cfg, zapLogger)
 
 	wrapper := &common.Wrapper{
-		ArticleService: asv,
+		ArticleService: articleService,
 		Cfg:            cfg,
 		Logger:         zapLogger,
 	}
@@ -32,8 +38,22 @@ func main() {
 
 	zapLogger.Info("Starting http server")
 
-	serverError := httpServer.ListenAndServe()
-	if serverError != nil {
-		zapLogger.Error("Cannot start http server", zap.Error(serverError))
+	go func() {
+		if err := httpServer.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
+			zapLogger.Error("HTTP server error", zap.Error(err))
+		}
+	}()
+
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+	<-sigChan
+
+	shutdownCtx, shutdownRelease := context.WithTimeout(context.Background(), 10*time.Second)
+	defer shutdownRelease()
+
+	if err := httpServer.Shutdown(shutdownCtx); err != nil {
+		zapLogger.Error("HTTP shutdown error", zap.Error(err))
 	}
+
+	zapLogger.Info("Server stopped")
 }
