@@ -23,3 +23,6 @@ go.work.sum
 
 # MacOS
 .DS_Store
+
+# Build output
+/build/output
