@@ -27,8 +27,5 @@ COPY --from=builder /app/build/output/main /app
 # Copy the config files.
 COPY --from=builder /app/config config
 
-# Grant executable permission.
-RUN chmod +x /app/main
-
 # Run the web service on container startup.
 CMD ["./main"]
