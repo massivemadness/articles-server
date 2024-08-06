@@ -13,7 +13,7 @@ RUN make build
 # Use the official Alpine image for a lean production container.
 # https://hub.docker.com/_/alpine
 # https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
-FROM alpine:latest AS runner
+FROM alpine:3.20.2 AS runner
 
 # Install library to open the binary :(
 RUN apk add --no-cache libc6-compat
@@ -25,7 +25,7 @@ WORKDIR /app
 COPY --from=builder /app/build/output/main /app
 
 # Copy the config files.
-COPY --from=builder /app/config /config
+COPY --from=builder /app/config config
 
 # Run the web service on container startup.
 CMD ["./main"]
