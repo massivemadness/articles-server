@@ -9,3 +9,7 @@ type ArticleResponse struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 }
+
+type CreateArticleResponse struct {
+	ID int64 `json:"id"`
+}

@@ -3,11 +3,13 @@ package articles
 import (
 	"github.com/massivemadness/articles-server/internal/config"
 	"go.uber.org/zap"
+	"strconv"
 )
 
 type ArticleService interface {
 	GetArticles() ([]string, error)
 	GetArticle(articleID int64) (Article, error)
+	CreateArticle(article Article) (int64, error)
 }
 
 type ArticleServiceImpl struct {
@@ -41,4 +43,11 @@ func (s *ArticleServiceImpl) GetArticle(articleID int64) (Article, error) {
 		Title: "Lorem ipsum",
 		Desc:  "Lorem ipsum dolor sit amet",
 	}, nil
+}
+
+func (s *ArticleServiceImpl) CreateArticle(article Article) (int64, error) {
+	s.logger.Debug(strconv.FormatInt(article.ID, 10))
+	s.logger.Debug(article.Title)
+	s.logger.Debug(article.Desc)
+	return 0, nil
 }

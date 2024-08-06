@@ -8,6 +8,7 @@ type HttpError struct {
 }
 
 var (
+	ErrDecode   = errors.New("decode error")
 	ErrInvalid  = errors.New("invalid_argument")
 	ErrNotFound = errors.New("not_found")
 	ErrUnknown  = errors.New("unknown_error")

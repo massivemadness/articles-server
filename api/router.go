@@ -18,7 +18,7 @@ func NewRouter(wrapper *common.Wrapper) chi.Router {
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Get("/articles", v1.GetArticlesHandler(wrapper))
 		r.Get("/articles/{id}", v1.GetArticleHandler(wrapper))
-		// TODO create (POST)
+		r.Post("/articles/create", v1.CreateArticleHandler(wrapper))
 		// TODO update (PATCH)
 		// TODO delete (DELETE)
 	})

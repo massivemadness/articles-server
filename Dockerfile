@@ -25,7 +25,7 @@ WORKDIR /app
 COPY --from=builder /app/build/output/main /app
 
 # Copy the config files.
-COPY --from=builder /app/config config
+COPY --from=builder /app/config /config
 
 # Run the web service on container startup.
 CMD ["./main"]
