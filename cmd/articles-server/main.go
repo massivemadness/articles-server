@@ -11,6 +11,7 @@ import (
 	"github.com/massivemadness/articles-server/internal/config"
 	"github.com/massivemadness/articles-server/internal/logger"
 	"github.com/massivemadness/articles-server/internal/repository"
+	"github.com/massivemadness/articles-server/internal/storage"
 	"go.uber.org/zap"
 	"net/http"
 	"os"
@@ -23,8 +24,12 @@ func main() {
 	cfg := config.MustLoad()
 	validate := validator.New()
 	zapLogger := logger.NewLogger(cfg.Env)
+	dbStorage, err := storage.New(cfg)
+	if err != nil {
+		zapLogger.Fatal("Failed to connect to database", zap.Error(err))
+	}
 
-	articleRepository := repository.NewArticleRepo()
+	articleRepository := repository.NewArticleRepo(dbStorage)
 	articleService := articles.NewService(articleRepository, cfg, zapLogger)
 
 	wrapper := &server.Wrapper{

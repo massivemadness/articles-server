@@ -2,6 +2,7 @@ package repository
 
 import (
 	"github.com/massivemadness/articles-server/internal/entity"
+	"github.com/massivemadness/articles-server/internal/storage"
 )
 
 type ArticleRepository interface {
@@ -11,11 +12,11 @@ type ArticleRepository interface {
 }
 
 type articleRepositoryImpl struct {
-	// TODO db sql.DB
+	db *storage.Storage
 }
 
-func NewArticleRepo() ArticleRepository {
-	return &articleRepositoryImpl{}
+func NewArticleRepo(db *storage.Storage) ArticleRepository {
+	return &articleRepositoryImpl{db: db}
 }
 
 func (r *articleRepositoryImpl) GetArticles() ([]string, error) {
