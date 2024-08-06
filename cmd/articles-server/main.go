@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/go-playground/validator/v10"
 	"github.com/massivemadness/articles-server/api"
 	"github.com/massivemadness/articles-server/api/common"
 	"github.com/massivemadness/articles-server/internal/articles"
@@ -19,12 +20,14 @@ import (
 
 func main() {
 	cfg := config.MustLoad()
+	validate := validator.New()
 	zapLogger := logger.NewLogger(cfg.Env)
 	articleService := articles.NewService(cfg, zapLogger)
 
 	wrapper := &common.Wrapper{
 		ArticleService: articleService,
 		Cfg:            cfg,
+		Validator:      validate,
 		Logger:         zapLogger,
 	}
 

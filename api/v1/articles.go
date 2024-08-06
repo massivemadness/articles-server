@@ -64,13 +64,9 @@ func GetArticleHandler(wrapper *common.Wrapper) http.HandlerFunc {
 
 func CreateArticleHandler(wrapper *common.Wrapper) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		var createArticleRequest CreateArticleRequest
 
-		decoder := json.NewDecoder(r.Body)
-		decoder.DisallowUnknownFields()
-
-		err := decoder.Decode(&createArticleRequest)
+		err := json.NewDecoder(r.Body).Decode(&createArticleRequest)
 		if err != nil {
 			render.Status(r, http.StatusBadRequest)
 			render.JSON(w, r, common.HttpError{
@@ -79,8 +75,16 @@ func CreateArticleHandler(wrapper *common.Wrapper) http.HandlerFunc {
 			})
 			return
 		}
-		
-		// TODO validation
+
+		err = wrapper.Validator.Struct(createArticleRequest)
+		if err != nil {
+			render.Status(r, http.StatusBadRequest)
+			render.JSON(w, r, common.HttpError{
+				ErrorMessage: "Invalid request body",
+				ErrorCode:    common.ErrDecode.Error(),
+			})
+			return
+		}
 
 		article := articles.Article{
 			ID:    0,
