@@ -3,86 +3,61 @@ package v1
 import (
 	"encoding/json"
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/render"
-	"github.com/massivemadness/articles-server/api/common"
+	"github.com/massivemadness/articles-server/api/server"
 	"github.com/massivemadness/articles-server/internal/articles"
 	"net/http"
 	"strconv"
 )
 
-func GetArticlesHandler(wrapper *common.Wrapper) http.HandlerFunc {
+func GetArticlesHandler(wrapper *server.Wrapper) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		dbArticles, err := wrapper.ArticleService.GetArticles()
 		if err != nil {
-			render.Status(r, http.StatusBadRequest)
-			render.JSON(w, r, common.HttpError{
-				ErrorMessage: "Not found",
-				ErrorCode:    common.ErrNotFound.Error(),
-			})
+			server.ErrorJSON(w, r, http.StatusBadRequest, server.ErrNotFound)
 			return
 		}
 
-		render.Status(r, http.StatusOK)
-		render.JSON(w, r, ArticlesResponse{
-			Articles: dbArticles,
-		})
+		response := ArticlesResponse{Articles: dbArticles}
+		server.ResponseJSON(w, r, http.StatusOK, response)
 	}
 }
 
-func GetArticleHandler(wrapper *common.Wrapper) http.HandlerFunc {
+func GetArticleHandler(wrapper *server.Wrapper) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		reqID := chi.URLParam(r, "id")
 		artID, err := strconv.ParseInt(reqID, 10, 64)
-
 		if err != nil {
-			render.Status(r, http.StatusBadRequest)
-			render.JSON(w, r, common.HttpError{
-				ErrorMessage: "Invalid article ID",
-				ErrorCode:    common.ErrInvalid.Error(),
-			})
+			server.ErrorJSON(w, r, http.StatusBadRequest, server.ErrDecode)
 			return
 		}
 
 		article, err := wrapper.ArticleService.GetArticle(artID)
 		if err != nil {
-			render.Status(r, http.StatusBadRequest)
-			render.JSON(w, r, common.HttpError{
-				ErrorMessage: "Article not found",
-				ErrorCode:    common.ErrInvalid.Error(),
-			})
+			server.ErrorJSON(w, r, http.StatusBadRequest, server.ErrNotFound)
 			return
 		}
 
-		render.Status(r, http.StatusOK)
-		render.JSON(w, r, ArticleResponse{
+		response := ArticleResponse{
 			ID:          article.ID,
 			Title:       article.Title,
 			Description: article.Desc,
-		})
+		}
+		server.ResponseJSON(w, r, http.StatusOK, response)
 	}
 }
 
-func CreateArticleHandler(wrapper *common.Wrapper) http.HandlerFunc {
+func CreateArticleHandler(wrapper *server.Wrapper) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var createArticleRequest CreateArticleRequest
-
 		err := json.NewDecoder(r.Body).Decode(&createArticleRequest)
 		if err != nil {
-			render.Status(r, http.StatusBadRequest)
-			render.JSON(w, r, common.HttpError{
-				ErrorMessage: "Invalid request body",
-				ErrorCode:    common.ErrDecode.Error(),
-			})
+			server.ErrorJSON(w, r, http.StatusBadRequest, server.ErrDecode)
 			return
 		}
 
 		err = wrapper.Validator.Struct(createArticleRequest)
 		if err != nil {
-			render.Status(r, http.StatusBadRequest)
-			render.JSON(w, r, common.HttpError{
-				ErrorMessage: "Invalid request body",
-				ErrorCode:    common.ErrDecode.Error(),
-			})
+			server.ErrorJSON(w, r, http.StatusBadRequest, server.ErrDecode)
 			return
 		}
 
@@ -94,15 +69,11 @@ func CreateArticleHandler(wrapper *common.Wrapper) http.HandlerFunc {
 
 		articleID, err := wrapper.ArticleService.CreateArticle(article)
 		if err != nil {
-			render.Status(r, http.StatusBadRequest)
-			render.JSON(w, r, common.HttpError{
-				ErrorMessage: "An error occurred",
-				ErrorCode:    common.ErrUnknown.Error(),
-			})
+			server.ErrorJSON(w, r, http.StatusBadRequest, server.ErrUnknown)
 			return
 		}
 
-		render.Status(r, http.StatusCreated)
-		render.JSON(w, r, CreateArticleResponse{ID: articleID})
+		response := CreateArticleResponse{ID: articleID}
+		server.ResponseJSON(w, r, http.StatusCreated, response)
 	}
 }

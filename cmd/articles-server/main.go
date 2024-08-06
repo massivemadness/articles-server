@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/go-playground/validator/v10"
 	"github.com/massivemadness/articles-server/api"
-	"github.com/massivemadness/articles-server/api/common"
+	"github.com/massivemadness/articles-server/api/server"
 	"github.com/massivemadness/articles-server/internal/articles"
 	"github.com/massivemadness/articles-server/internal/config"
 	"github.com/massivemadness/articles-server/internal/logger"
@@ -24,7 +24,7 @@ func main() {
 	zapLogger := logger.NewLogger(cfg.Env)
 	articleService := articles.NewService(cfg, zapLogger)
 
-	wrapper := &common.Wrapper{
+	wrapper := &server.Wrapper{
 		ArticleService: articleService,
 		Cfg:            cfg,
 		Validator:      validate,
