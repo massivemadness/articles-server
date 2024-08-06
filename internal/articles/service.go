@@ -1,49 +1,56 @@
 package articles
 
 import (
+	"errors"
 	"github.com/massivemadness/articles-server/internal/config"
+	"github.com/massivemadness/articles-server/internal/entity"
+	"github.com/massivemadness/articles-server/internal/repository"
 	"go.uber.org/zap"
 )
 
 type ArticleService interface {
 	GetArticles() ([]string, error)
-	GetArticle(articleID int64) (Article, error)
-	CreateArticle(article Article) (int64, error)
+	GetArticle(articleID int64) (entity.Article, error)
+	CreateArticle(article entity.Article) (int64, error)
 }
 
-type ArticleServiceImpl struct {
+type articleServiceImpl struct {
+	repo   repository.ArticleRepository
 	cfg    *config.Config
 	logger *zap.Logger
 }
 
 func NewService(
+	repository repository.ArticleRepository,
 	cfg *config.Config,
 	logger *zap.Logger,
 ) ArticleService {
-	return &ArticleServiceImpl{
+	return &articleServiceImpl{
+		repo:   repository,
 		cfg:    cfg,
 		logger: logger,
 	}
 }
 
-type Article struct {
-	ID    int64
-	Title string
-	Desc  string
+func (s *articleServiceImpl) GetArticles() ([]string, error) {
+	data, err := s.repo.GetArticles()
+	if err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			return []string{}, nil
+		}
+		return nil, err
+	}
+	return data, nil
 }
 
-func (s *ArticleServiceImpl) GetArticles() ([]string, error) {
-	return []string{"1", "2", "3", "4", "5", "6", "7", "8", "9"}, nil
-}
-
-func (s *ArticleServiceImpl) GetArticle(articleID int64) (Article, error) {
-	return Article{
+func (s *articleServiceImpl) GetArticle(articleID int64) (entity.Article, error) {
+	return entity.Article{
 		ID:    articleID,
 		Title: "Lorem ipsum",
 		Desc:  "Lorem ipsum dolor sit amet",
 	}, nil
 }
 
-func (s *ArticleServiceImpl) CreateArticle(_ Article) (int64, error) {
+func (s *articleServiceImpl) CreateArticle(_ entity.Article) (int64, error) {
 	return 0, nil
 }

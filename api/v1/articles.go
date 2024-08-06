@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/go-chi/chi/v5"
 	"github.com/massivemadness/articles-server/api/server"
-	"github.com/massivemadness/articles-server/internal/articles"
+	"github.com/massivemadness/articles-server/internal/entity"
 	"net/http"
 	"strconv"
 )
@@ -61,7 +61,7 @@ func CreateArticleHandler(wrapper *server.Wrapper) http.HandlerFunc {
 			return
 		}
 
-		article := articles.Article{
+		article := entity.Article{
 			ID:    0,
 			Title: createArticleRequest.Title,
 			Desc:  createArticleRequest.Description,

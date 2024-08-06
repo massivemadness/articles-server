@@ -10,6 +10,7 @@ import (
 	"github.com/massivemadness/articles-server/internal/articles"
 	"github.com/massivemadness/articles-server/internal/config"
 	"github.com/massivemadness/articles-server/internal/logger"
+	"github.com/massivemadness/articles-server/internal/repository"
 	"go.uber.org/zap"
 	"net/http"
 	"os"
@@ -22,7 +23,9 @@ func main() {
 	cfg := config.MustLoad()
 	validate := validator.New()
 	zapLogger := logger.NewLogger(cfg.Env)
-	articleService := articles.NewService(cfg, zapLogger)
+
+	articleRepository := repository.NewArticleRepo()
+	articleService := articles.NewService(articleRepository, cfg, zapLogger)
 
 	wrapper := &server.Wrapper{
 		ArticleService: articleService,
