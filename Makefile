@@ -2,8 +2,8 @@
 deps:
 	go mod tidy -v
 
-.PHONY: build
-build:
+.PHONY: build-binary
+build-binary:
 	go build -o ./build/output/main ./cmd/articles-server
 
 .PHONY: build-image
