@@ -8,8 +8,8 @@ http_server:
   idle_timeout: 60s
 
 database:
-  host: "localhost"
+  host: "postgres"
   port: 5432
-  dbname: "serverdb"
+  dbname: "testdb"
   username: "postgres"
-  password: ""
+  password: "secret_password"

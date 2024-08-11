@@ -1,0 +1,30 @@
+services:
+  backend:
+    build: ./
+    container_name: backend-server
+    ports:
+      - "8080:8080"
+    networks:
+      - shared-network
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16
+    container_name: postgres-server
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret_password
+      POSTGRES_DB: testdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - shared-network
+
+networks:
+  shared-network:
+
+volumes:
+  pg_data:
