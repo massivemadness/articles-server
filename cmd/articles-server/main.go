@@ -24,12 +24,12 @@ func main() {
 	cfg := config.MustLoad()
 	validate := validator.New()
 	zapLogger := logger.NewLogger(cfg.Env)
-	dbStorage, _ := storage.New(cfg)
-	/*if err != nil {
+	db, err := storage.New(cfg)
+	if err != nil {
 		zapLogger.Fatal("Failed to connect to database", zap.Error(err))
-	}*/
+	}
 
-	articleRepository := repository.NewArticleRepo(dbStorage)
+	articleRepository := repository.NewArticleRepo(db)
 	articleService := articles.NewService(articleRepository, cfg, zapLogger)
 
 	wrapper := &server.Wrapper{

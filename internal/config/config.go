@@ -16,6 +16,7 @@ var (
 type Config struct {
 	Application
 	HttpServer HTTPServer `yaml:"http_server" env-required:"true"`
+	Database   Database   `yaml:"database" env-required:"true"`
 }
 
 type Application struct {
@@ -27,6 +28,14 @@ type HTTPServer struct {
 	Port        int           `yaml:"port" env-default:"8080"`
 	Timeout     time.Duration `yaml:"timeout" env-default:"4s"`
 	IdleTimeout time.Duration `yaml:"idle_timeout" env-default:"60s"`
+}
+
+type Database struct {
+	Host     string `yaml:"host" env-required:"true"`
+	Port     int    `yaml:"port" env-required:"true"`
+	DbName   string `yaml:"dbname" env-required:"true"`
+	Username string `yaml:"username" env-required:"true"`
+	Password string `yaml:"password"`
 }
 
 func MustLoad() *Config {
