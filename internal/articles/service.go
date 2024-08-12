@@ -47,6 +47,10 @@ func (s *articleServiceImpl) GetArticle(articleID int64) (entity.Article, error)
 	}, nil
 }
 
-func (s *articleServiceImpl) CreateArticle(_ entity.Article) (int64, error) {
-	return 0, nil
+func (s *articleServiceImpl) CreateArticle(article entity.Article) (int64, error) {
+	articleID, err := s.repo.CreateArticle(article)
+	if err != nil {
+		return 0, err
+	}
+	return articleID, nil
 }

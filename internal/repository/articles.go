@@ -53,5 +53,16 @@ func (r *articleRepositoryImpl) GetArticle(articleID int64) (entity.Article, err
 }
 
 func (r *articleRepositoryImpl) CreateArticle(article entity.Article) (int64, error) {
-	return article.ID, nil
+	var articleID int64
+	err := r.db.QueryRow(
+		context.Background(),
+		"INSERT INTO tbl_articles (title, description) VALUES ($1, $2) RETURNING id",
+		article.Title,
+		article.Desc,
+	).Scan(&articleID)
+
+	if err != nil {
+		return 0, err
+	}
+	return articleID, nil
 }
