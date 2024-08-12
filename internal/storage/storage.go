@@ -20,11 +20,11 @@ func New(cfg *config.Config) (*Storage, error) {
 		cfg.Database.Port,
 		cfg.Database.Name,
 	)
+
 	pool, err := pgxpool.New(context.Background(), url)
 	if err != nil {
 		return nil, err
 	}
-	defer pool.Close()
 
 	err = pool.Ping(context.Background())
 	if err != nil {

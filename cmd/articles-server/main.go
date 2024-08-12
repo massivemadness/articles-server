@@ -28,6 +28,7 @@ func main() {
 	if err != nil {
 		zapLogger.Fatal("Failed to connect to database", zap.Error(err))
 	}
+	defer db.Close()
 
 	articleRepository := repository.NewArticleRepo(db)
 	articleService := articles.NewService(articleRepository, cfg, zapLogger)

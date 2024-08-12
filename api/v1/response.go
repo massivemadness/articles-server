@@ -1,7 +1,7 @@
 package v1
 
 type ArticlesResponse struct {
-	Articles []string `json:"articles"`
+	Articles []ArticleResponse `json:"articles"`
 }
 
 type ArticleResponse struct {

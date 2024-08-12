@@ -1,7 +1,6 @@
 package articles
 
 import (
-	"errors"
 	"github.com/massivemadness/articles-server/internal/config"
 	"github.com/massivemadness/articles-server/internal/entity"
 	"github.com/massivemadness/articles-server/internal/repository"
@@ -9,7 +8,7 @@ import (
 )
 
 type ArticleService interface {
-	GetArticles() ([]string, error)
+	GetArticles() ([]entity.Article, error)
 	GetArticle(articleID int64) (entity.Article, error)
 	CreateArticle(article entity.Article) (int64, error)
 }
@@ -32,12 +31,9 @@ func NewService(
 	}
 }
 
-func (s *articleServiceImpl) GetArticles() ([]string, error) {
+func (s *articleServiceImpl) GetArticles() ([]entity.Article, error) {
 	data, err := s.repo.GetArticles()
 	if err != nil {
-		if errors.Is(err, repository.ErrNotFound) {
-			return []string{}, nil
-		}
 		return nil, err
 	}
 	return data, nil

@@ -17,7 +17,16 @@ func GetArticlesHandler(wrapper *server.Wrapper) http.HandlerFunc {
 			return
 		}
 
-		response := ArticlesResponse{Articles: dbArticles}
+		articles := make([]ArticleResponse, len(dbArticles))
+		for i, article := range dbArticles {
+			articles[i] = ArticleResponse{
+				ID:          article.ID,
+				Title:       article.Title,
+				Description: article.Desc,
+			}
+		}
+
+		response := ArticlesResponse{Articles: articles}
 		server.ResponseJSON(w, r, http.StatusOK, response)
 	}
 }
