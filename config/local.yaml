@@ -10,6 +10,6 @@ http_server:
 database:
   host: "postgres"
   port: 5432
-  dbname: "testdb"
-  username: "postgres"
+  name: "testdb"
+  user: "postgres"
   password: "secret_password"

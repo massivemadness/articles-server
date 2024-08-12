@@ -33,8 +33,8 @@ type HTTPServer struct {
 type Database struct {
 	Host     string `yaml:"host" env-required:"true"`
 	Port     int    `yaml:"port" env-required:"true"`
-	DbName   string `yaml:"dbname" env-required:"true"`
-	Username string `yaml:"username" env-required:"true"`
+	Name     string `yaml:"name" env-required:"true"`
+	User     string `yaml:"user" env-required:"true"`
 	Password string `yaml:"password"`
 }
 

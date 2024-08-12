@@ -14,11 +14,11 @@ type Storage struct {
 func New(cfg *config.Config) (*Storage, error) {
 	url := fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s?sslmode=disable",
-		cfg.Database.Username,
+		cfg.Database.User,
 		cfg.Database.Password,
 		cfg.Database.Host,
 		cfg.Database.Port,
-		cfg.Database.DbName,
+		cfg.Database.Name,
 	)
 	conn, err := pgx.Connect(context.Background(), url)
 	if err != nil {
