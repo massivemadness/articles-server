@@ -33,9 +33,9 @@ type HTTPServer struct {
 type Database struct {
 	Host     string `yaml:"host" env-default:"localhost"`
 	Port     int    `yaml:"port" env-default:"5432"`
-	Name     string `yaml:"name" env:"POSTGRES_DB" env-required:"true"`
-	User     string `yaml:"user" env:"POSTGRES_USER" env-required:"true"`
-	Password string `yaml:"password" env:"POSTGRES_PASSWORD" env-required:"true"`
+	Name     string `yaml:"name" env:"DB_NAME" env-required:"true"`
+	User     string `yaml:"user" env:"DB_USER" env-required:"true"`
+	Password string `yaml:"password" env:"DB_PASSWORD" env-required:"true"`
 }
 
 func MustLoad() *Config {
