@@ -56,7 +56,7 @@ func MustLoad() *Config {
 func getConfigPath() string {
 	configPath := os.Getenv("CONFIG_PATH")
 	if configPath == "" {
-		configPath = "config/local.yaml"
+		configPath = "config/config.yaml"
 	}
 	return configPath
 }

@@ -3,12 +3,12 @@ package storage
 import (
 	"context"
 	"fmt"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/massivemadness/articles-server/internal/config"
 )
 
 type Storage struct {
-	*pgx.Conn
+	*pgxpool.Pool
 }
 
 func New(cfg *config.Config) (*Storage, error) {
@@ -20,11 +20,16 @@ func New(cfg *config.Config) (*Storage, error) {
 		cfg.Database.Port,
 		cfg.Database.Name,
 	)
-	conn, err := pgx.Connect(context.Background(), url)
+	pool, err := pgxpool.New(context.Background(), url)
 	if err != nil {
 		return nil, err
 	}
-	defer conn.Close(context.Background())
+	defer pool.Close()
 
-	return &Storage{conn}, nil
+	err = pool.Ping(context.Background())
+	if err != nil {
+		return nil, err
+	}
+
+	return &Storage{pool}, nil
 }
