@@ -40,11 +40,11 @@ func (s *articleServiceImpl) GetArticles() ([]entity.Article, error) {
 }
 
 func (s *articleServiceImpl) GetArticle(articleID int64) (entity.Article, error) {
-	return entity.Article{
-		ID:    articleID,
-		Title: "Lorem ipsum",
-		Desc:  "Lorem ipsum dolor sit amet",
-	}, nil
+	article, err := s.repo.GetArticle(articleID)
+	if err != nil {
+		return entity.Article{}, err
+	}
+	return article, nil
 }
 
 func (s *articleServiceImpl) CreateArticle(article entity.Article) (int64, error) {

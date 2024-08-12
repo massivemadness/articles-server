@@ -21,7 +21,7 @@ func NewArticleRepo(db *storage.Storage) ArticleRepository {
 }
 
 func (r *articleRepositoryImpl) GetArticles() ([]entity.Article, error) {
-	rows, err := r.db.Query(context.Background(), "SELECT * FROM tbl_articles;")
+	rows, err := r.db.Query(context.Background(), "SELECT * FROM tbl_articles")
 	if err != nil {
 		return nil, err
 	}
@@ -45,11 +45,17 @@ func (r *articleRepositoryImpl) GetArticles() ([]entity.Article, error) {
 }
 
 func (r *articleRepositoryImpl) GetArticle(articleID int64) (entity.Article, error) {
-	return entity.Article{
-		ID:    articleID,
-		Title: "Lorem ipsum",
-		Desc:  "Lorem ipsum dolor sit amet",
-	}, nil
+	var article entity.Article
+	err := r.db.QueryRow(
+		context.Background(),
+		"SELECT * FROM tbl_articles WHERE id = $1",
+		articleID,
+	).Scan(&article.ID, &article.Title, &article.Desc)
+
+	if err != nil {
+		return article, err
+	}
+	return article, nil
 }
 
 func (r *articleRepositoryImpl) CreateArticle(article entity.Article) (int64, error) {
