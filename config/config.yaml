@@ -8,8 +8,8 @@ http_server:
   idle_timeout: 60s
 
 database:
-  host: "postgres"
+  host: "postgres" # docker container name
   port: 5432
-  name: "testdb"
+  name: "articles"
   user: "postgres"
   password: "secret_password"

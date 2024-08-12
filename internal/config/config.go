@@ -20,7 +20,7 @@ type Config struct {
 }
 
 type Application struct {
-	Env string `yaml:"env" env-required:"true"`
+	Env string `yaml:"env" env:"SERVER_ENV" env-required:"true"`
 }
 
 type HTTPServer struct {
@@ -31,11 +31,11 @@ type HTTPServer struct {
 }
 
 type Database struct {
-	Host     string `yaml:"host" env-required:"true"`
-	Port     int    `yaml:"port" env-required:"true"`
-	Name     string `yaml:"name" env-required:"true"`
-	User     string `yaml:"user" env-required:"true"`
-	Password string `yaml:"password"`
+	Host     string `yaml:"host" env-default:"localhost"`
+	Port     int    `yaml:"port" env-default:"5432"`
+	Name     string `yaml:"name" env:"POSTGRES_DB" env-required:"true"`
+	User     string `yaml:"user" env:"POSTGRES_USER" env-required:"true"`
+	Password string `yaml:"password" env:"POSTGRES_PASSWORD" env-required:"true"`
 }
 
 func MustLoad() *Config {
