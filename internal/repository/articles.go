@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"github.com/massivemadness/articles-server/internal/entity"
 	"github.com/massivemadness/articles-server/internal/storage"
 )
@@ -32,6 +33,9 @@ func (r *articleRepositoryImpl) GetArticles() ([]entity.Article, error) {
 		values, err := rows.Values()
 		if err != nil {
 			return nil, err
+		}
+		if len(values) != 3 {
+			return nil, errors.New("invalid structure")
 		}
 		article := entity.Article{
 			ID:    values[0].(int64),
