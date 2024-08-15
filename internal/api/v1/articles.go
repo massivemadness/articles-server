@@ -3,7 +3,7 @@ package v1
 import (
 	"encoding/json"
 	"github.com/go-chi/chi/v5"
-	"github.com/massivemadness/articles-server/api/server"
+	"github.com/massivemadness/articles-server/internal/api/server"
 	"github.com/massivemadness/articles-server/internal/entity"
 	"net/http"
 	"strconv"

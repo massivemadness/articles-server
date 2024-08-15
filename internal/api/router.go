@@ -3,9 +3,9 @@ package api
 import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	mw "github.com/massivemadness/articles-server/api/middleware"
-	"github.com/massivemadness/articles-server/api/server"
-	"github.com/massivemadness/articles-server/api/v1"
+	mw "github.com/massivemadness/articles-server/internal/api/middleware"
+	"github.com/massivemadness/articles-server/internal/api/server"
+	"github.com/massivemadness/articles-server/internal/api/v1"
 )
 
 func NewRouter(wrapper *server.Wrapper) chi.Router {
