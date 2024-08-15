@@ -14,6 +14,10 @@ build-image:
 run:
 	go run ./cmd/articles-server
 
+.PHONY: test
+test:
+	go test ./...
+
 .PHONY: clean
 clean:
 	rm -r ./build/output
