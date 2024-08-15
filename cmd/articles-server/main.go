@@ -52,7 +52,7 @@ func main() {
 
 	go func() {
 		if err := httpServer.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
-			zapLogger.Error("HTTP server error", zap.Error(err))
+			zapLogger.Fatal("HTTP server error", zap.Error(err))
 		}
 	}()
 
