@@ -2,15 +2,14 @@ package repository
 
 import (
 	"context"
-	"errors"
 	"github.com/massivemadness/articles-server/internal/entity"
 	"github.com/massivemadness/articles-server/internal/storage"
 )
 
 type ArticleRepository interface {
 	GetAll() ([]entity.Article, error)
-	GetById(articleID int64) (entity.Article, error)
-	Create(article entity.Article) (int64, error)
+	GetById(articleID int64) (*entity.Article, error)
+	Create(article *entity.Article) (int64, error)
 }
 
 type articleRepositoryImpl struct {
@@ -22,7 +21,7 @@ func NewArticleRepo(db *storage.Storage) ArticleRepository {
 }
 
 func (r *articleRepositoryImpl) GetAll() ([]entity.Article, error) {
-	rows, err := r.db.Query(context.Background(), "SELECT (id, title, description) FROM tbl_articles")
+	rows, err := r.db.Query(context.Background(), "SELECT id, title, description FROM tbl_articles")
 	if err != nil {
 		return nil, err
 	}
@@ -30,25 +29,21 @@ func (r *articleRepositoryImpl) GetAll() ([]entity.Article, error) {
 
 	articles := make([]entity.Article, 0)
 	for rows.Next() {
-		values, err := rows.Values()
+		var article entity.Article
+		err := rows.Scan(&article.ID, &article.Title, &article.Desc)
 		if err != nil {
 			return nil, err
 		}
-		if len(values) != 3 {
-			return nil, errors.New("invalid structure")
-		}
-		article := entity.Article{
-			ID:    values[0].(int64),
-			Title: values[1].(string),
-			Desc:  values[2].(string),
-		}
 		articles = append(articles, article)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
 	}
 
 	return articles, nil
 }
 
-func (r *articleRepositoryImpl) GetById(articleID int64) (entity.Article, error) {
+func (r *articleRepositoryImpl) GetById(articleID int64) (*entity.Article, error) {
 	var article entity.Article
 	err := r.db.QueryRow(
 		context.Background(),
@@ -57,12 +52,12 @@ func (r *articleRepositoryImpl) GetById(articleID int64) (entity.Article, error)
 	).Scan(&article.ID, &article.Title, &article.Desc)
 
 	if err != nil {
-		return article, err
+		return nil, err
 	}
-	return article, nil
+	return &article, nil
 }
 
-func (r *articleRepositoryImpl) Create(article entity.Article) (int64, error) {
+func (r *articleRepositoryImpl) Create(article *entity.Article) (int64, error) {
 	var articleID int64
 	err := r.db.QueryRow(
 		context.Background(),

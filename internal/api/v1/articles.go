@@ -70,7 +70,7 @@ func CreateArticleHandler(wrapper *server.Wrapper) http.HandlerFunc {
 			return
 		}
 
-		article := entity.Article{
+		article := &entity.Article{
 			ID:    0,
 			Title: createArticleRequest.Title,
 			Desc:  createArticleRequest.Description,

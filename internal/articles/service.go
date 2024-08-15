@@ -9,8 +9,8 @@ import (
 
 type ArticleService interface {
 	GetArticles() ([]entity.Article, error)
-	GetArticle(articleID int64) (entity.Article, error)
-	CreateArticle(article entity.Article) (int64, error)
+	GetArticle(articleID int64) (*entity.Article, error)
+	CreateArticle(article *entity.Article) (int64, error)
 }
 
 type articleServiceImpl struct {
@@ -39,15 +39,15 @@ func (s *articleServiceImpl) GetArticles() ([]entity.Article, error) {
 	return data, nil
 }
 
-func (s *articleServiceImpl) GetArticle(articleID int64) (entity.Article, error) {
+func (s *articleServiceImpl) GetArticle(articleID int64) (*entity.Article, error) {
 	article, err := s.repo.GetById(articleID)
 	if err != nil {
-		return entity.Article{}, err
+		return nil, err
 	}
 	return article, nil
 }
 
-func (s *articleServiceImpl) CreateArticle(article entity.Article) (int64, error) {
+func (s *articleServiceImpl) CreateArticle(article *entity.Article) (int64, error) {
 	articleID, err := s.repo.Create(article)
 	if err != nil {
 		return 0, err
