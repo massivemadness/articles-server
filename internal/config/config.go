@@ -20,7 +20,7 @@ type Config struct {
 }
 
 type Application struct {
-	Env string `yaml:"env" env:"SERVER_ENV" env-required:"true"`
+	Env string `yaml:"env" env-required:"true"`
 }
 
 type HTTPServer struct {
@@ -33,9 +33,9 @@ type HTTPServer struct {
 type Database struct {
 	Host     string `yaml:"host" env-default:"localhost"`
 	Port     int    `yaml:"port" env-default:"5432"`
-	Name     string `yaml:"name" env:"DB_NAME" env-required:"true"`
-	User     string `yaml:"user" env:"DB_USER" env-required:"true"`
-	Password string `yaml:"password" env:"DB_PASSWORD" env-required:"true"`
+	Name     string `yaml:"name" env-required:"true"`
+	User     string `yaml:"user" env-required:"true"`
+	Password string `yaml:"password" env-required:"true"`
 }
 
 func MustLoad() *Config {
@@ -56,7 +56,7 @@ func MustLoad() *Config {
 func getConfigPath() string {
 	configPath := os.Getenv("CONFIG_PATH")
 	if configPath == "" {
-		configPath = "config/config.yaml"
+		configPath = "config/local.yaml"
 	}
 	return configPath
 }

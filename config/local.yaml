@@ -8,7 +8,7 @@ http_server:
   idle_timeout: 60s
 
 database:
-  host: "postgres" # docker container name
+  host: "postgres" # service name from docker compose
   port: 5432
   name: "articles"
   user: "postgres"
