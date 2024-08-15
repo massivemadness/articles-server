@@ -8,9 +8,9 @@ import (
 )
 
 type ArticleRepository interface {
-	GetArticles() ([]entity.Article, error)
-	GetArticle(articleID int64) (entity.Article, error)
-	CreateArticle(article entity.Article) (int64, error)
+	GetAll() ([]entity.Article, error)
+	GetById(articleID int64) (entity.Article, error)
+	Create(article entity.Article) (int64, error)
 }
 
 type articleRepositoryImpl struct {
@@ -21,7 +21,7 @@ func NewArticleRepo(db *storage.Storage) ArticleRepository {
 	return &articleRepositoryImpl{db: db}
 }
 
-func (r *articleRepositoryImpl) GetArticles() ([]entity.Article, error) {
+func (r *articleRepositoryImpl) GetAll() ([]entity.Article, error) {
 	rows, err := r.db.Query(context.Background(), "SELECT (id, title, description) FROM tbl_articles")
 	if err != nil {
 		return nil, err
@@ -48,7 +48,7 @@ func (r *articleRepositoryImpl) GetArticles() ([]entity.Article, error) {
 	return articles, nil
 }
 
-func (r *articleRepositoryImpl) GetArticle(articleID int64) (entity.Article, error) {
+func (r *articleRepositoryImpl) GetById(articleID int64) (entity.Article, error) {
 	var article entity.Article
 	err := r.db.QueryRow(
 		context.Background(),
@@ -62,7 +62,7 @@ func (r *articleRepositoryImpl) GetArticle(articleID int64) (entity.Article, err
 	return article, nil
 }
 
-func (r *articleRepositoryImpl) CreateArticle(article entity.Article) (int64, error) {
+func (r *articleRepositoryImpl) Create(article entity.Article) (int64, error) {
 	var articleID int64
 	err := r.db.QueryRow(
 		context.Background(),

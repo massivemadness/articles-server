@@ -32,7 +32,7 @@ func NewService(
 }
 
 func (s *articleServiceImpl) GetArticles() ([]entity.Article, error) {
-	data, err := s.repo.GetArticles()
+	data, err := s.repo.GetAll()
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (s *articleServiceImpl) GetArticles() ([]entity.Article, error) {
 }
 
 func (s *articleServiceImpl) GetArticle(articleID int64) (entity.Article, error) {
-	article, err := s.repo.GetArticle(articleID)
+	article, err := s.repo.GetById(articleID)
 	if err != nil {
 		return entity.Article{}, err
 	}
@@ -48,7 +48,7 @@ func (s *articleServiceImpl) GetArticle(articleID int64) (entity.Article, error)
 }
 
 func (s *articleServiceImpl) CreateArticle(article entity.Article) (int64, error) {
-	articleID, err := s.repo.CreateArticle(article)
+	articleID, err := s.repo.Create(article)
 	if err != nil {
 		return 0, err
 	}
