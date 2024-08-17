@@ -86,3 +86,22 @@ func CreateArticleHandler(wrapper *server.Wrapper) http.HandlerFunc {
 		server.ResponseJSON(w, r, http.StatusCreated, response)
 	}
 }
+
+func DeleteArticleHandler(wrapper *server.Wrapper) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		reqID := chi.URLParam(r, "id")
+		artID, err := strconv.ParseInt(reqID, 10, 64)
+		if err != nil {
+			server.ErrorJSON(w, r, http.StatusBadRequest, server.ErrDecode)
+			return
+		}
+
+		err = wrapper.ArticleService.DeleteArticle(artID)
+		if err != nil {
+			server.ErrorJSON(w, r, http.StatusBadRequest, server.ErrNotFound)
+			return
+		}
+
+		server.ResponseJSON(w, r, http.StatusOK, nil)
+	}
+}

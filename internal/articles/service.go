@@ -11,6 +11,7 @@ type ArticleService interface {
 	GetArticles() ([]entity.Article, error)
 	GetArticle(articleID int64) (*entity.Article, error)
 	CreateArticle(article *entity.Article) (int64, error)
+	DeleteArticle(articleID int64) error
 }
 
 type articleServiceImpl struct {
@@ -53,4 +54,8 @@ func (s *articleServiceImpl) CreateArticle(article *entity.Article) (int64, erro
 		return 0, err
 	}
 	return articleID, nil
+}
+
+func (s *articleServiceImpl) DeleteArticle(articleID int64) error {
+	return s.repo.Delete(articleID)
 }

@@ -19,8 +19,7 @@ func NewRouter(wrapper *server.Wrapper) chi.Router {
 		r.Get("/articles", v1.GetArticlesHandler(wrapper))
 		r.Get("/articles/{id}", v1.GetArticleHandler(wrapper))
 		r.Post("/articles/create", v1.CreateArticleHandler(wrapper))
-		// TODO update (PATCH)
-		// TODO delete (DELETE)
+		r.Delete("/articles/delete/{id}", v1.DeleteArticleHandler(wrapper))
 	})
 	return r
 }

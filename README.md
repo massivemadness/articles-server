@@ -1,6 +1,6 @@
 # articles-server
 
-### Local deployment
+### Local development
 
 1. Build an image and run docker container:  
 `$ docker compose up --build`

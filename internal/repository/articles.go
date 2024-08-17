@@ -10,6 +10,7 @@ type ArticleRepository interface {
 	GetAll() ([]entity.Article, error)
 	GetById(articleID int64) (*entity.Article, error)
 	Create(article *entity.Article) (int64, error)
+	Delete(articleID int64) error
 }
 
 type articleRepositoryImpl struct {
@@ -47,7 +48,7 @@ func (r *articleRepositoryImpl) GetById(articleID int64) (*entity.Article, error
 	var article entity.Article
 	err := r.db.QueryRow(
 		context.Background(),
-		"SELECT (id, title, description) FROM tbl_articles WHERE id = $1",
+		"SELECT id, title, description FROM tbl_articles WHERE id = $1",
 		articleID,
 	).Scan(&article.ID, &article.Title, &article.Desc)
 
@@ -70,4 +71,9 @@ func (r *articleRepositoryImpl) Create(article *entity.Article) (int64, error) {
 		return 0, err
 	}
 	return articleID, nil
+}
+
+func (r *articleRepositoryImpl) Delete(articleID int64) error {
+	_, err := r.db.Exec(context.Background(), "DELETE FROM tbl_articles WHERE id = $1", articleID)
+	return err
 }
