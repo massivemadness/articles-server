@@ -8,7 +8,7 @@ build-binary:
 
 .PHONY: build-image
 build-image:
-	docker build -t articles-server --progress=plain .
+	docker build -f build/Dockerfile -t articles-server --progress=plain .
 
 .PHONY: run
 run:

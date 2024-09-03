@@ -1,6 +1,8 @@
 services:
   backend:
-    build: ./
+    build:
+      context: ./
+      dockerfile: ./build/Dockerfile
     container_name: articles-server
     env_file:
       - .env
