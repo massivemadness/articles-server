@@ -1,11 +1,12 @@
 package server
 
 import (
-	"github.com/go-chi/render"
 	"net/http"
+
+	"github.com/go-chi/render"
 )
 
-func ResponseJSON(w http.ResponseWriter, r *http.Request, code int, obj interface{}) {
+func ResponseJSON(w http.ResponseWriter, r *http.Request, code int, obj any) {
 	if obj == nil {
 		obj = struct{}{}
 	}
