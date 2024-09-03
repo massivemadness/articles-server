@@ -2,11 +2,12 @@ package v1
 
 import (
 	"encoding/json"
+	"net/http"
+	"strconv"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/massivemadness/articles-server/internal/api/server"
 	"github.com/massivemadness/articles-server/internal/entity"
-	"net/http"
-	"strconv"
 )
 
 func GetArticlesHandler(wrapper *server.Wrapper) http.HandlerFunc {

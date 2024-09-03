@@ -5,7 +5,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	mw "github.com/massivemadness/articles-server/internal/api/middleware"
 	"github.com/massivemadness/articles-server/internal/api/server"
-	"github.com/massivemadness/articles-server/internal/api/v1"
+	v1 "github.com/massivemadness/articles-server/internal/api/v1"
 )
 
 func NewRouter(wrapper *server.Wrapper) chi.Router {

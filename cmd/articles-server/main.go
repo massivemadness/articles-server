@@ -4,6 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/massivemadness/articles-server/internal/api"
 	"github.com/massivemadness/articles-server/internal/api/server"
@@ -13,11 +19,6 @@ import (
 	"github.com/massivemadness/articles-server/internal/repository"
 	"github.com/massivemadness/articles-server/internal/storage"
 	"go.uber.org/zap"
-	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
 )
 
 func main() {

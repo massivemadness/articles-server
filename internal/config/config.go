@@ -1,10 +1,11 @@
 package config
 
 import (
-	"github.com/ilyakaznacheev/cleanenv"
 	"log"
 	"os"
 	"time"
+
+	"github.com/ilyakaznacheev/cleanenv"
 )
 
 var (

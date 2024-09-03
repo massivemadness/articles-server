@@ -3,6 +3,7 @@ package storage
 import (
 	"context"
 	"fmt"
+
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/massivemadness/articles-server/internal/config"
 )
