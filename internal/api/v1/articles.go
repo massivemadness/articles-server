@@ -12,7 +12,7 @@ import (
 
 func GetArticlesHandler(wrapper *server.Wrapper) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		dbArticles, err := wrapper.ArticleService.GetArticles()
+		dbArticles, err := wrapper.ArticleService.GetArticles(r.Context())
 		if err != nil {
 			server.ErrorJSON(w, r, http.StatusBadRequest, server.ErrNotFound)
 			return
@@ -41,7 +41,7 @@ func GetArticleHandler(wrapper *server.Wrapper) http.HandlerFunc {
 			return
 		}
 
-		article, err := wrapper.ArticleService.GetArticle(artID)
+		article, err := wrapper.ArticleService.GetArticle(r.Context(), artID)
 		if err != nil {
 			server.ErrorJSON(w, r, http.StatusBadRequest, server.ErrNotFound)
 			return
@@ -77,7 +77,7 @@ func CreateArticleHandler(wrapper *server.Wrapper) http.HandlerFunc {
 			Desc:  createArticleRequest.Description,
 		}
 
-		articleID, err := wrapper.ArticleService.CreateArticle(article)
+		articleID, err := wrapper.ArticleService.CreateArticle(r.Context(), article)
 		if err != nil {
 			server.ErrorJSON(w, r, http.StatusBadRequest, server.ErrUnknown)
 			return
@@ -97,7 +97,7 @@ func DeleteArticleHandler(wrapper *server.Wrapper) http.HandlerFunc {
 			return
 		}
 
-		err = wrapper.ArticleService.DeleteArticle(artID)
+		err = wrapper.ArticleService.DeleteArticle(r.Context(), artID)
 		if err != nil {
 			server.ErrorJSON(w, r, http.StatusBadRequest, server.ErrNotFound)
 			return

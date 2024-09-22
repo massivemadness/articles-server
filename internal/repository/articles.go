@@ -8,10 +8,10 @@ import (
 )
 
 type ArticleRepository interface {
-	GetAll() ([]entity.Article, error)
-	GetById(articleID int64) (*entity.Article, error)
-	Create(article *entity.Article) (int64, error)
-	Delete(articleID int64) error
+	GetAll(ctx context.Context) ([]entity.Article, error)
+	GetById(ctx context.Context, articleID int64) (*entity.Article, error)
+	Create(ctx context.Context, article *entity.Article) (int64, error)
+	Delete(ctx context.Context, articleID int64) error
 }
 
 type articleRepositoryImpl struct {
@@ -22,8 +22,8 @@ func NewArticleRepo(db *storage.Storage) ArticleRepository {
 	return &articleRepositoryImpl{db: db}
 }
 
-func (r *articleRepositoryImpl) GetAll() ([]entity.Article, error) {
-	rows, err := r.db.Query(context.Background(), "SELECT id, title, description FROM tbl_articles")
+func (r *articleRepositoryImpl) GetAll(ctx context.Context) ([]entity.Article, error) {
+	rows, err := r.db.Query(ctx, "SELECT id, title, description FROM tbl_articles")
 	if err != nil {
 		return nil, err
 	}
@@ -45,10 +45,10 @@ func (r *articleRepositoryImpl) GetAll() ([]entity.Article, error) {
 	return articles, nil
 }
 
-func (r *articleRepositoryImpl) GetById(articleID int64) (*entity.Article, error) {
+func (r *articleRepositoryImpl) GetById(ctx context.Context, articleID int64) (*entity.Article, error) {
 	var article entity.Article
 	err := r.db.QueryRow(
-		context.Background(),
+		ctx,
 		"SELECT id, title, description FROM tbl_articles WHERE id = $1",
 		articleID,
 	).Scan(&article.ID, &article.Title, &article.Desc)
@@ -59,10 +59,10 @@ func (r *articleRepositoryImpl) GetById(articleID int64) (*entity.Article, error
 	return &article, nil
 }
 
-func (r *articleRepositoryImpl) Create(article *entity.Article) (int64, error) {
+func (r *articleRepositoryImpl) Create(ctx context.Context, article *entity.Article) (int64, error) {
 	var articleID int64
 	err := r.db.QueryRow(
-		context.Background(),
+		ctx,
 		"INSERT INTO tbl_articles (title, description) VALUES ($1, $2) RETURNING id",
 		article.Title,
 		article.Desc,
@@ -74,7 +74,7 @@ func (r *articleRepositoryImpl) Create(article *entity.Article) (int64, error) {
 	return articleID, nil
 }
 
-func (r *articleRepositoryImpl) Delete(articleID int64) error {
-	_, err := r.db.Exec(context.Background(), "DELETE FROM tbl_articles WHERE id = $1", articleID)
+func (r *articleRepositoryImpl) Delete(ctx context.Context, articleID int64) error {
+	_, err := r.db.Exec(ctx, "DELETE FROM tbl_articles WHERE id = $1", articleID)
 	return err
 }
