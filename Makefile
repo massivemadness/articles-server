@@ -1,6 +1,6 @@
 .PHONY: deps
 deps:
-	go mod tidy -v
+	go mod download
 
 .PHONY: build-binary
 build-binary:
