@@ -6,6 +6,7 @@ import (
 	mw "github.com/massivemadness/articles-server/internal/api/middleware"
 	"github.com/massivemadness/articles-server/internal/api/server"
 	v1 "github.com/massivemadness/articles-server/internal/api/v1"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func PublicRouter(wrapper *server.Wrapper) chi.Router {
@@ -27,6 +28,7 @@ func PublicRouter(wrapper *server.Wrapper) chi.Router {
 func PrivateRouter() chi.Router {
 	r := chi.NewRouter()
 
+	r.Mount("/metrics", promhttp.Handler())
 	r.Mount("/debug", middleware.Profiler())
 
 	return r
