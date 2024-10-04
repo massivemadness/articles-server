@@ -42,20 +42,36 @@ func main() {
 	}
 
 	httpServer := http.Server{
-		Addr:         fmt.Sprintf("%s:%d", cfg.HttpServer.Address, cfg.HttpServer.Port),
+		Addr:         fmt.Sprintf("%s:%d", cfg.HttpServer.Address, cfg.HttpServer.PublicPort),
 		ReadTimeout:  cfg.HttpServer.Timeout,
 		WriteTimeout: cfg.HttpServer.Timeout,
 		IdleTimeout:  cfg.HttpServer.IdleTimeout,
-		Handler:      api.NewRouter(wrapper),
+		Handler:      api.PublicRouter(wrapper),
 	}
 
-	zapLogger.Info("Starting http server")
+	zapLogger.Info("Starting http server...")
 
 	go func() {
 		if err := httpServer.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
 			zapLogger.Fatal("HTTP server error", zap.Error(err))
 		}
 	}()
+
+	httpPrivateServer := http.Server{
+		Addr:         fmt.Sprintf("%s:%d", cfg.HttpServer.Address, cfg.HttpServer.PrivatePort),
+		ReadTimeout:  cfg.HttpServer.Timeout,
+		WriteTimeout: cfg.HttpServer.Timeout,
+		IdleTimeout:  cfg.HttpServer.IdleTimeout,
+		Handler:      api.PrivateRouter(),
+	}
+
+	go func() {
+		if err := httpPrivateServer.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
+			zapLogger.Fatal("HTTP server error private", zap.Error(err))
+		}
+	}()
+
+	zapLogger.Info("Service is ready")
 
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)

@@ -8,7 +8,7 @@ import (
 	v1 "github.com/massivemadness/articles-server/internal/api/v1"
 )
 
-func NewRouter(wrapper *server.Wrapper) chi.Router {
+func PublicRouter(wrapper *server.Wrapper) chi.Router {
 	r := chi.NewRouter()
 
 	r.Use(middleware.Recoverer)
@@ -21,5 +21,13 @@ func NewRouter(wrapper *server.Wrapper) chi.Router {
 		r.Post("/articles/create", v1.CreateArticleHandler(wrapper))
 		r.Delete("/articles/delete/{id}", v1.DeleteArticleHandler(wrapper))
 	})
+	return r
+}
+
+func PrivateRouter() chi.Router {
+	r := chi.NewRouter()
+
+	r.Mount("/debug", middleware.Profiler())
+
 	return r
 }
