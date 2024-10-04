@@ -7,6 +7,7 @@ http_server:
   private_port: 8081
   timeout: 4s
   idle_timeout: 60s
+  shutdown_timeout: 10s
 
 database:
   host: "postgres" # service name from docker compose

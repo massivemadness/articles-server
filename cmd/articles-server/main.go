@@ -8,7 +8,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/massivemadness/articles-server/internal/api"
@@ -77,11 +76,15 @@ func main() {
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 	<-sigChan
 
-	shutdownCtx, shutdownRelease := context.WithTimeout(context.Background(), 10*time.Second)
+	shutdownCtx, shutdownRelease := context.WithTimeout(context.Background(), cfg.HttpServer.ShutdownTimeout)
 	defer shutdownRelease()
 
 	if err := httpServer.Shutdown(shutdownCtx); err != nil {
 		zapLogger.Error("HTTP shutdown error", zap.Error(err))
+	}
+
+	if err := httpPrivateServer.Shutdown(shutdownCtx); err != nil {
+		zapLogger.Error("HTTP shutdown error private", zap.Error(err))
 	}
 
 	zapLogger.Info("Server stopped")

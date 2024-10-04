@@ -25,11 +25,12 @@ type Application struct {
 }
 
 type HTTPServer struct {
-	Address     string        `yaml:"address" env-default:"localhost"`
-	PublicPort  int           `yaml:"public_port" env-default:"8080"`
-	PrivatePort int           `yaml:"private_port" env-default:"8081"`
-	Timeout     time.Duration `yaml:"timeout" env-default:"4s"`
-	IdleTimeout time.Duration `yaml:"idle_timeout" env-default:"60s"`
+	Address         string        `yaml:"address" env-default:"localhost"`
+	PublicPort      int           `yaml:"public_port" env-default:"8080"`
+	PrivatePort     int           `yaml:"private_port" env-default:"8081"`
+	Timeout         time.Duration `yaml:"timeout" env-default:"4s"`
+	IdleTimeout     time.Duration `yaml:"idle_timeout" env-default:"60s"`
+	ShutdownTimeout time.Duration `yaml:"shutdown_timeout" env-default:"10s"`
 }
 
 type Database struct {
