@@ -10,6 +10,6 @@ var (
 		prometheus.CounterOpts{
 			Name: "http_requests_total",
 		},
-		[]string{"pattern", "method"},
+		[]string{"pattern", "method", "status"},
 	)
 )
