@@ -15,6 +15,7 @@ func PublicRouter(wrapper *server.Wrapper) chi.Router {
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
 	r.Use(mw.Logger(wrapper.Logger))
+	r.Use(mw.Metrics())
 
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Get("/articles", v1.GetArticlesHandler(wrapper))
